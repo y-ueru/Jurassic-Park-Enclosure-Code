@@ -1,11 +1,15 @@
+/*
+Jurassic Park Enclsoure
+
+Team Name: Usagi Fish
+Team Members: Claire Huang, Siddharth Ramalingam, Han Xu
+Description:
+*/
+
 void setup() {
-  // put your setup code here, to run once:
-button_pin: 1212212142233232;
-button_pin2: 23232332323232424885960
+
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
 
 }
-// claire was here
