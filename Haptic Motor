@@ -1,0 +1,20 @@
+// Define the pin connected to the haptic motor
+const int motorPin = 3; // You can use any digital pin (3, 5, 6, 9, 10, 11 support PWM)
+
+void setup() {
+  // Set the motor pin as output
+  pinMode(motorPin, OUTPUT);
+  Serial.begin(9600);
+  Serial.println("Starting Haptic Motor Test");
+  
+  // Run the motor immediately on startup
+  digitalWrite(motorPin, HIGH); // Turn motor ON
+  Serial.println("On");
+  // delay(500);                   // Run for 500ms (half a second)
+  // digitalWrite(motorPin, LOW);  // Turn motor OFF
+  // Serial.println("Off");
+}
+
+void loop() {
+  // Nothing here - motor runs once on startup only
+}
