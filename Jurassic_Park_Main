@@ -4,12 +4,44 @@ Jurassic Park Enclsoure
 Team Name: Usagi Fish
 Team Members: Claire Huang, Siddharth Ramalingam, Han Xu
 Description:
+
+first scene: switch and haptic motor for vibration
+second scene: goat head flips and shows death
+third scene: dinosaur flips up (jumpscare)
+fourth scene: car flips upside down
+fifth scene: car lands in tree and LED blinks for the headlight
 */
 
-void setup() {
+#include <Servo.h>
 
+Servo goatservo;  // create servo variable
+
+const int buttonPin = 10;
+int buttonState = 0;
+int previousButtonState = 0;
+
+void setup() {
+  goatservo.attach(A5);  // attaches the servo on pin 9
+  pinMode(buttonPin, INPUT);
+  Serial.begin(9600);
+  Serial.println("Start Testing");
 }
 
 void loop() {
+  buttonState = digitalRead(buttonPin);
+  if (buttonState != previousButtonState) {
+    if (buttonState == HIGH) {
+      Serial.println("button pressed");
+      servofunction();
+    } else {
+      Serial.println("button released");
+    }
+  }
+  previousButtonState = buttonState;
+}
 
+void servofunction() { // flips the goats head
+  goatservo.write(180);
+  delay(500);         // move to 0 degrees (180 degree rotation)
+  goatservo.write(90);  // wait for servo to complete movement
 }
