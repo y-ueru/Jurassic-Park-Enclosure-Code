@@ -1,1 +1,15 @@
+#include <Servo.h>
 
+Servo myservo; // create servo variable
+
+void setup(){
+  myservo.attach(9); // attaches the servo on pin 9
+  myservo.write(180); // start at 180 degrees
+  delay(1000); // wait for servo to reach position
+  myservo.write(90); // move to 0 degrees (180 degree rotation)
+  delay(1000); // wait for servo to complete movement
+}
+
+void loop(){
+  // Nothing here - servo only moves once during setup
+}
