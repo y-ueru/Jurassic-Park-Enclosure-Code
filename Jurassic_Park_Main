@@ -106,9 +106,9 @@ void vibrationFunction() {       // leaves and foliage rustle
 }
 
 void goatDeath() {  // shows the goat's death
-  goatServo.write(180);
-  delay(500);           // move to 0 degrees (180 degree rotation)
-  goatServo.write(90);  // wait for servo to complete movement
+  goatServo.write(180); // starts servo movement
+  delay(500);
+  goatServo.write(90);  // stops servo movement
 }
 
 void dinoMovement() {  // flips the dinosaur up (jumpscare)
