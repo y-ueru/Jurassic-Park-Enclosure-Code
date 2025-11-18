@@ -64,7 +64,127 @@ void vibrationFunction() {       // leaves and foliage rustle
   Serial.println("On");
   delay(2000);                  // Run for 2s
   digitalWrite(motorPin, LOW);  // Turn motor OFF
+  Serial.println("Off");/*
+Jurassic Park Enclsoure
+
+Team Name: Usagi Fish
+Team Members: Claire Huang, Siddharth Ramalingam, Han Xu
+Description:
+
+first scene: switch and haptic motor for vibration
+second scene: goat head flips and shows death
+third scene: dinosaur flips up (jumpscare)
+fourth scene: car flips upside down
+fifth scene: car lands in tree and LED blinks for the headlight
+*/
+
+#include <Servo.h>
+
+const int motorPin = 2;
+const int switch1pin = 3;  // switch for scene 1
+int switch1State = 0;
+int previousSwitch1State = 0;
+
+Servo goatServo;            // create servo variable
+const int switch2pin = 10;  // switch for scene 2
+int switch2State = 0;
+int previousSwitch2State = 0;
+
+Servo dinoServo;
+const int switch3pin = 11;  // switch for scene 3
+int switch3State = 0;
+int previousSwitch3State = 0;
+
+Servo carServo;
+const int switch4pin = 12;  // switch for scene 4
+int switch4State = 0;
+int previousSwitch4State = 0;
+
+void setup() {
+  pinMode(switch1pin, INPUT);
+  pinMode(motorPin, OUTPUT);  // Set the motor pin as output
+
+  pinMode(switch2pin, INPUT);
+  goatServo.attach(A5);  // attaches the servo on pin A5
+
+  pinMode(switch3pin, INPUT);
+  dinoServo.attach(A6);
+
+  pinMode(switch4pin, INPUT);
+  carServo.attach(A7);
+
+  Serial.begin(9600);
+  Serial.println("Start Testing");
+}
+
+void loop() {
+  switch1State = digitalRead(switch1pin);  // scene 1
+  if (switch1State != previousSwitch1State) {
+    if (switch1State == HIGH) {
+      Serial.println("switch 1 activated");
+      vibrationFunction();
+    } else {
+      Serial.println("switch 1 released");
+    }
+  }
+  previousSwitch1State = switch1State;
+
+  switch2State = digitalRead(switch2pin);  // scene 2
+  if (switch2State != previousSwitch2State) {
+    if (switch2State == HIGH) {
+      Serial.println("switch 2 activated");
+      goatDeath();
+    } else {
+      Serial.println("switch 2 released");
+    }
+  }
+  previousSwitch2State = switch2State;
+
+  switch3State = digitalRead(switch3pin);  // scene 3
+  if (switch3State != previousSwitch3State) {
+    if (switch3State == HIGH) {
+      Serial.println("switch 3 activated");
+      dinoMovement();
+    } else {
+      Serial.println("switch 3 released");
+    }
+  }
+  previousSwitch3State = switch3State;
+
+  switch4State = digitalRead(switch4pin);  // scene 4
+  if (switch4State != previousSwitch4State) {
+    if (switch4State == HIGH) {
+      Serial.println("switch 4 activated");
+      carFlip();
+    } else {
+      Serial.println("switch 4 released");
+    }
+  }
+  previousSwitch4State = switch4State;
+}
+
+void vibrationFunction() {       // leaves and foliage rustle
+  digitalWrite(motorPin, HIGH);  // Turn motor ON
+  Serial.println("On");
+  delay(2000);                  // Run for 2s
+  digitalWrite(motorPin, LOW);  // Turn motor OFF
   Serial.println("Off");
+}
+
+void goatDeath() {  // shows the goat's death
+  goatServo.write(180);
+  delay(500);           // move to 0 degrees (180 degree rotation)
+  goatServo.write(90);  // wait for servo to complete movement
+}
+
+void dinoMovement() {  // flips the dinosaur up (jumpscare)
+}
+
+void carFlip() { //car flips upside down
+}
+
+void headlightBlink() { // car headlight blinks on and off
+}
 }
 
 void servoFunction() {  // flips the goats head
