@@ -53,6 +53,7 @@ class Scene{
   }
 };
 
+// Create Scene objects
 Scene scene1;
 Scene scene2;
 Scene scene3;
@@ -94,7 +95,7 @@ void setup() {
 void loop() {
   scene1.update(1, vibrateMotor);
   scene2.update(2, rotateGoat, resetGoat);
-  scene3.update(3, moveDino);
+  scene3.update(3, flipDino);
   scene4.update(4, flipCar, resetCar);
   scene5.update(5, playEndingMelody);
 }
@@ -129,7 +130,7 @@ void resetGoat(){
 }
 
 // Scene 3: Dinosaur Movement
-void moveDino(){
+void flipDino(){
   dinoServo.write(180);
   delay(1000);
   dinoServo.write(90);
@@ -150,7 +151,7 @@ void flipCar(){
 // Scene 4: Reset
 void resetCar(){
   delay(5000);
-  carServo.write(90);
+  carServo.write(180);
   Serial.println("Car reset");
 }
 
@@ -158,6 +159,7 @@ void resetCar(){
 void playEndingMelody() {
   Serial.println("Melody ON");
   for (int thisNote = 0; thisNote < 11; thisNote++) {
+    Serial.println(melody[thisNote]);
     // Play each note for its duration
     int noteDuration = 1000 / noteDurations[thisNote];
     tone(piezoPin, melody[thisNote], noteDuration);
