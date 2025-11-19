@@ -12,10 +12,11 @@ fourth scene: car flips upside down
 fifth scene: car lands in tree and LED blinks for the headlight
 */
 
+#include "pitches.h"
 #include <Servo.h>
 
-const int motorPin = 2;
-const int switch1pin = 3;  // switch for scene 1
+const int motorPin = 5;
+const int switch1pin = 9;  // switch for scene 1
 int switch1State = 0;
 int previousSwitch1State = 0;
 
@@ -30,9 +31,20 @@ int switch3State = 0;
 int previousSwitch3State = 0;
 
 Servo carServo;
-const int switch4pin = 12;  // switch for scene 4
+const int switch4pin = 3;  // switch for scene 4
 int switch4State = 0;
 int previousSwitch4State = 0;
+
+const int switch5pin = 6;  // switch for scene 4
+int switch5State = 0;
+int previousSwitch5State = 0;
+
+int melody[] = {
+  NOTE_C4, NOTE_G3, NOTE_G3, NOTE_A3, NOTE_G3, 0, NOTE_B3, NOTE_C4
+};
+int noteDurations[] = {
+  4, 8, 8, 4, 4, 4, 4, 4
+};
 
 void setup() {
   pinMode(switch1pin, INPUT);
@@ -42,17 +54,18 @@ void setup() {
   goatServo.attach(A5);  // attaches the servo on pin A5
 
   pinMode(switch3pin, INPUT);
-  dinoServo.attach(A6);
+  dinoServo.attach(A4);
 
   pinMode(switch4pin, INPUT);
-  carServo.attach(A7);
+  carServo.attach(A3);
 
   Serial.begin(9600);
   Serial.println("Start Testing");
 }
 
 void loop() {
-  switch1State = digitalRead(switch1pin);  // scene 1
+  // scene 1
+  switch1State = digitalRead(switch1pin);
   if (switch1State != previousSwitch1State) {
     if (switch1State == HIGH) {
       Serial.println("switch 1 activated");
@@ -63,18 +76,24 @@ void loop() {
   }
   previousSwitch1State = switch1State;
 
-  switch2State = digitalRead(switch2pin);  // scene 2
+  // scene 2
+  switch2State = digitalRead(switch2pin);
   if (switch2State != previousSwitch2State) {
     if (switch2State == HIGH) {
       Serial.println("switch 2 activated");
-      goatDeath();
+      goatServo.write(180);
+      Serial.println("goat timer finished");
+
     } else {
       Serial.println("switch 2 released");
+      delay(5000);  //hey make this a timer please!
+      goatServo.write(0);
     }
   }
   previousSwitch2State = switch2State;
 
-  switch3State = digitalRead(switch3pin);  // scene 3
+  // scene 3
+  switch3State = digitalRead(switch3pin);
   if (switch3State != previousSwitch3State) {
     if (switch3State == HIGH) {
       Serial.println("switch 3 activated");
@@ -85,37 +104,84 @@ void loop() {
   }
   previousSwitch3State = switch3State;
 
-  switch4State = digitalRead(switch4pin);  // scene 4
+  // scene 4
+  switch4State = digitalRead(switch4pin);
   if (switch4State != previousSwitch4State) {
     if (switch4State == HIGH) {
       Serial.println("switch 4 activated");
-      carFlip();
+      carServo.write(-180);
     } else {
       Serial.println("switch 4 released");
+      delay(5000);
+      carServo.write(90);
     }
   }
   previousSwitch4State = switch4State;
+
+  // scene 5
+  if (switch5State != previousSwitch5State) {
+    if (switch5State == HIGH) {
+      Serial.println("Piezo ON")
+      for (int thisNote = 0; thisNote < 8; thisNote++) {
+
+        // to calculate the note duration, take one second divided by the note type.
+        //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
+        int noteDuration = 1000 / noteDurations[thisNote];
+        tone(8, melody[thisNote], noteDuration);
+
+        // to distinguish the notes, set a minimum time between them.
+        // the note's duration + 30% seems to work well:
+        int pauseBetweenNotes = noteDuration * 1.30;
+        delay(pauseBetweenNotes);
+        // stop the tone playing:
+        noTone(8);
+      }
+    }
+  }
 }
 
-void vibrationFunction() {       // leaves and foliage rustle
-  digitalWrite(motorPin, HIGH);  // Turn motor ON
-  Serial.println("On");
-  delay(2000);                  // Run for 2s
-  digitalWrite(motorPin, LOW);  // Turn motor OFF
-  Serial.println("Off");
+void vibrationFunction() {  // dinosaur footsteps
+  // First stepß
+  digitalWrite(motorPin, HIGH);
+  Serial.println("THUD 1");
+  delay(300);  // Short, powerful burst
+  digitalWrite(motorPin, LOW);
+  delay(1200);  // Pause between steps
+
+  // Second step
+  digitalWrite(motorPin, HIGH);
+  Serial.println("THUD 2");
+  delay(300);
+  digitalWrite(motorPin, LOW);
+  delay(1200);
+
+  // Third step
+  digitalWrite(motorPin, HIGH);
+  Serial.println("THUD 3");
+  delay(300);
+  digitalWrite(motorPin, LOW);
+  delay(1800);  // Longer pause before repeating
 }
 
-void goatDeath() {  // shows the goat's death
-  goatServo.write(180); // starts servo movement
-  delay(500);
-  goatServo.write(90);  // stops servo movement
+void goatDeath() {       // shows the goat's death
+  goatServo.write(180);  // starts servo movement
+
+  goatServo.write(0);  // stops servo movement
 }
 
 void dinoMovement() {  // flips the dinosaur up (jumpscare)
+  dinoServo.write(180);
+  delay(1000);
+  dinoServo.write(90);
+  delay(5000);
+  dinoServo.write(0);
+  delay(1000);
+  dinoServo.write(90);
 }
 
-void carFlip() { //car flips upside down
+void carFlip() {  //car flips upside down
+  carServo.write(180);
 }
 
-void headlightBlink() { // car headlight blinks on and off
+void headlightBlink() {  // car headlight blinks on and off
 }
