@@ -1,23 +1,16 @@
 /*
-Jurassic Park Enclosure
+Jurassic Park
 
-Course: AET 313 Code and Fabrication
-Team: Usagi Fish
-Members: Claire Huang, Siddharth Ramalingam, Han Xu
+Team Name: Usagi Fish
+Team Members: Claire Huang, Siddharth Ramalingam, Han Xu
 
+Descritpion:
 This program controls 5 interactive scenes in the enclosure, each triggered by its own switch:
 1. The switch triggers haptic motor vibration.
 2. The goat head rotates to reveal its death.
 3. The dinosaur flips up as a jump scare.
 4. The car flips upside down.
 5. The car lands in a tree and plays the ending melody.
-*/
-
-/*
-Revising:
-
-1. Change from delay() to millis()
-2. 
 */
 
 #include <Servo.h>
@@ -61,11 +54,7 @@ class Scene{
 };
 
 // Create Scene objects
-Scene scene1;
-Scene scene2;
-Scene scene3;
-Scene scene4;
-Scene scene5;
+Scene scene1, scene2, scene3, scene4, scene5;
 
 Servo goatServo;
 Servo dinoServo;
@@ -75,12 +64,11 @@ const int motorPin = 5;
 const int piezoPin = 8;
 
 int melody[] = {
-  NOTE_C4, NOTE_E4, NOTE_G4, NOTE_C5, NOTE_B4, NOTE_G4, NOTE_A4, NOTE_F4, NOTE_G4, 0, NOTE_C5
+  NOTE_C4, NOTE_D4, NOTE_E4, NOTE_G4, NOTE_E4, NOTE_G4
 };
 int noteDurations[] = {
-  4, 4, 4, 2, 4, 4, 4, 4, 2, 4, 1
+  8, 8, 8, 4, 8, 2
 };
-
 
 void setup() {
   Serial.begin(9600);
@@ -144,7 +132,7 @@ void flipDino(){
   dinoServo.write(90);
   delay(5000);
   Serial.print("Dinosaur Up");
-  dinoServo.write(0);s
+  dinoServo.write(0);
   delay(2750);
   dinoServo.write(90);
   Serial.println("Dinosaur Down");
@@ -166,12 +154,11 @@ void resetCar(){
 // Scene 5: Play Ending Melody
 void playEndingMelody() {
   Serial.println("Melody ON");
-  for (int thisNote = 0; thisNote < 11; thisNote++) {
+  for (int thisNote = 0; thisNote < 6; thisNote++) {
     Serial.println(melody[thisNote]);
     // Play each note for its duration
     int noteDuration = 1000 / noteDurations[thisNote];
     tone(piezoPin, melody[thisNote], noteDuration);
-
     // Pause between notes
     int pauseBetweenNotes = noteDuration * 1.30;
     delay(pauseBetweenNotes);
